@@ -14,17 +14,16 @@ import java.util.Scanner;
 
 public class UniqProcessor {
 
-    // TODO remove static fields
 
-    private static UniqProcessor uniqProcessor = new UniqProcessor();
+    private  static UniqProcessor uniqProcessor = new UniqProcessor();
 
-    private static UniqParser up;
-    private static File outputFile = null;
-    private static File inputFile = null;
-    private static Scanner sc = null;
+    private UniqParser up;
+    private File outputFile = null;  // Convert to local ?
+    private File inputFile = null;   // Convert to local ?
+    private Scanner sc = null;
 
-    private static Collection<String> lines = new ArrayList<>();
-    private static Collection<String> processed = new ArrayList<>();
+    private Collection<String> lines = new ArrayList<>();
+    private Collection<String> processed = new ArrayList<>();
 
     private UniqProcessor() {
     }
@@ -44,7 +43,7 @@ public class UniqProcessor {
     // TODO Buffered reader ili iz fajla ili iz skenera !
 
     //TODO finish read() method implementation
-    private static void read() {
+    private void read() {
         if (up.isRiddenFromFile()) {
 
             // FIXME get file path, and make File objects from it:
@@ -69,12 +68,12 @@ public class UniqProcessor {
     }
 
     // TODO finish method processData()
-    private static void processData() {
+    private void processData() {
 
     }
 
     //TODO finish method
-    private static void output() {
+    private void output() {
         if (up.isOutputedToFile()) {
             outputFile = new File(up.getOutputFileName());
             // TODO Write results from list (or somewhere else) to file
