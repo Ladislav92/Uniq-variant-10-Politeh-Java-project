@@ -1,8 +1,5 @@
 package com.ladislav;
 
-/**
- *
- */
 public class Main {
 
     // command line: uniq [-i] [-u] [-c] [-s num] [-o file] [file]

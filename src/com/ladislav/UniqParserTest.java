@@ -7,7 +7,6 @@ import junit.framework.TestCase;
  */
 public class UniqParserTest extends TestCase {
 
-
     public void testParseArgs() throws Exception {
 
         UniqParser up = new UniqParser();
@@ -57,7 +56,5 @@ public class UniqParserTest extends TestCase {
         assertEquals(up.getIgnoreCharsTo(), -1);
         assertEquals(up.getOutputFileName(), "output.txt");
         assertEquals(up.getInputFileName(), "input.txt");
-
     }
-
 }

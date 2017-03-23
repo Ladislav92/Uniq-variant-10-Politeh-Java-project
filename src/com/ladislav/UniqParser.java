@@ -4,24 +4,20 @@ package com.ladislav;
  * Created by Ladislav on 3/22/2017.
  */
 
-// TODO Make inner class of UniqProcessor ?!
-    // problem here: Unit testing much harder
-    // maybie just put two classes in same package and make UniqParser protected?
-
-
 class UniqParser {
 
     private String inputFileName = "";
     private String outputFileName = "";
-    private int ignoreCharsTo = -1;         // -s
-    private boolean outputedToFile = false;   // -o
 
+    private int ignoreCharsTo = -1;         // -s
+
+    private boolean outputedToFile = false;   // -o
     private boolean riddenFromFile = false;
     private boolean caseSensitive = true;   // -i
     private boolean unique = false;         // -u
     private boolean compressed = false;     // -c
 
-    public void parseArgs(String[] args) {
+    void parseArgs(String[] args) {
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-i":
@@ -48,30 +44,31 @@ class UniqParser {
         }
     }
 
-    public String getInputFileName() {
+    String getInputFileName() {
         return inputFileName;
     }
 
-    public String getOutputFileName() {
+    String getOutputFileName() {
         return outputFileName;
     }
 
-    public int getIgnoreCharsTo() {
+    int getIgnoreCharsTo() {
         return ignoreCharsTo;
     }
 
-    public boolean isOutputedToFile() {
+    boolean isOutputedToFile() {
         return outputedToFile;
     }
 
-    public boolean isRiddenFromFile() {
+    boolean isRiddenFromFile() {
         return riddenFromFile;
     }
-    public boolean isCaseSensitive() {
+
+    boolean isCaseSensitive() {
         return caseSensitive;
     }
 
-    public boolean isUnique() {
+    boolean isUnique() {
         return unique;
     }
 
