@@ -1,9 +1,6 @@
 package com.ladislav;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
@@ -14,8 +11,7 @@ import java.util.Scanner;
 
 public class UniqProcessor {
 
-
-    private  static UniqProcessor uniqProcessor = new UniqProcessor();
+    private static UniqProcessor uniqProcessor = new UniqProcessor();
 
     private UniqParser up;
     private File outputFile = null;  // Convert to local ?
@@ -41,45 +37,54 @@ public class UniqProcessor {
     }
 
     // TODO Buffered reader ili iz fajla ili iz skenera !
+    // TODO test
 
-    //TODO finish read() method implementation
-    private void read() {
+    public void read() {
         if (up.isRiddenFromFile()) {
-
-            // FIXME get file path, and make File objects from it:
-            // Path filePath = FileSystems.getDefault().getPath(up.getInputFileName());
-
             inputFile = new File(up.getInputFileName());
+            String temp;
 
-            try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+                while ((temp = reader.readLine()) != null) {
+                    lines.add(temp);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            sc = new Scanner(System.in);
+            String temp;
 
-                while (reader.readLine() != null) {
-                    lines.add(reader.readLine());
+            System.out.println("No file to read from provided in arguments.");
+            System.out.println("Enter lines you want to process from console! To quit, enter blank line.");
+
+            while (!(temp = sc.nextLine()).equals("")) {
+                lines.add(temp);
+            }
+        }
+    }
+
+    // TODO finish method processData()
+    public void processData() {
+
+    }
+
+    //TODO test
+    public void output() {
+        if (up.isOutputedToFile()) {
+            outputFile = new File(up.getOutputFileName());
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+                for (String line : processed) {
+                    writer.write(line);
+                    writer.newLine();
                 }
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-
-            sc = new Scanner(System.in);
-            //TODO while input is not blank line - read it in list
-        }
-    }
-
-    // TODO finish method processData()
-    private void processData() {
-
-    }
-
-    //TODO finish method
-    private void output() {
-        if (up.isOutputedToFile()) {
-            outputFile = new File(up.getOutputFileName());
-            // TODO Write results from list (or somewhere else) to file
-
-        } else {
-            //TODO print results to console
+            processed.forEach(System.out::println);
         }
     }
 }
