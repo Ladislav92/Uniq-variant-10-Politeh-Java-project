@@ -9,7 +9,7 @@ class UniqParser {
     private String inputFileName = "";
     private String outputFileName = "";
 
-    private int ignoreCharsTo = -1;         // -s
+    private int ignoreCharsTo = 0;         // -s
 
     private boolean outputedToFile = false;   // -o
     private boolean riddenFromFile = false;
@@ -52,7 +52,7 @@ class UniqParser {
         return outputFileName;
     }
 
-    int getIgnoreCharsTo() {
+    int getIgnoredCharsNum() {
         return ignoreCharsTo;
     }
 

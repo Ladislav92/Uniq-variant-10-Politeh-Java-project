@@ -5,7 +5,6 @@ import java.util.*;
 
 /**
  * Created by Ladislav on 3/22/2017.
- *
  */
 
 public class UniqProcessor {
@@ -14,7 +13,7 @@ public class UniqProcessor {
 
     private UniqParser up;
     private Collection<String> lines = new ArrayList<>();
-    private Map<String, Integer> processed;
+    private Map<String, KVPair<String, Integer>> processed;
 
     private UniqProcessor() {
     }
@@ -59,90 +58,36 @@ public class UniqProcessor {
         }
     }
 
-    // TODO finish me !
     // TODO test me !
-    // TODO clean code (too much repetition) and optimise me!
     /**
-     * First idea
-     * For now it reads lines list one by one and puts it in map to prepare output
-     * If unique and compress are flagged - will be easy to read it from map
-     * If not - it will just read in lines from ArrayList
-      */
+     * Second idea (probably final)
+     * Processes data only if unique or compressed flagged
+     * Stores comparision string as map key and original
+     * and number of occurrences in KVPair (key-value pair) object
+     *
+     */
     public void processData() {
 
-        processed = new HashMap<>();
+        if (up.isUnique() || up.isCompressed()) {
 
-        // BETTER HERE: if UNIQUE or COMPRESS flagged do: (else just print out)
-        for (String line : lines) {
+            processed = new LinkedHashMap<>();
+            boolean caseInsensitive = !up.isCaseSensitive();
+            int ignoredCharacters = up.getIgnoredCharsNum();
 
-            if (processed.isEmpty()) {
-                processed.put(line, 1);
-            } else {
+            for (String line : lines) {
 
-                // POSSIBILITY: if ignoring N chars make another Map?
+                KVPair<String, Integer> original = new KVPair<>(line, 1);
+                String temp = caseInsensitive ? line.toLowerCase() : line;
+                temp = temp.substring(ignoredCharacters);
 
-                String temp = line;
-                int ignoreTo = up.getIgnoreCharsTo();
-
-                if (!up.isCaseSensitive()) {
-                    temp = temp.toLowerCase();
-                    if (ignoreTo > 0) {
-                        boolean keyExists = false;
-                        for (String key : processed.keySet()) {
-                            if (temp.substring(0, ignoreTo).equals(key.substring(0, ignoreTo).toLowerCase())) {
-                                int oldValue = processed.get(temp);
-                                processed.replace(temp, ++oldValue);
-                                keyExists = true;
-                                break;
-                            }
-                        }
-                        if (!keyExists) {
-                            processed.put(temp, 1);
-                        }
-
-                    } else {
-                        boolean keyExists = false;
-                        for (String key : processed.keySet()) {
-                            if (temp.equals(key)) {
-                                int oldValue = processed.get(temp);
-                                processed.replace(temp, ++oldValue);
-                                keyExists = true;
-                                break;
-                            }
-                        }
-                        if (!keyExists) {
-                            processed.put(temp, 1);
-                        }
-                    }
-
+                if (processed.containsKey(temp)) {
+                    KVPair<String, Integer> keyValuePair = processed.get(temp);
+                    int oldValue = keyValuePair.getValue();
+                    keyValuePair.setValue(++oldValue);
                 } else {
-                    if (ignoreTo > 0) {
-                        boolean keyExists = false;
-                        for (String key : processed.keySet()) {
-                            if (temp.substring(0, ignoreTo).equals(key.substring(0, ignoreTo))) {
-                                int oldValue = processed.get(temp);
-                                processed.replace(temp, ++oldValue);
-                                keyExists = true;
-                                break;
-                            }
-                        }
-                        if (!keyExists) {
-                            processed.put(temp, 1);
-                        }
-                    } else {
-                        if (processed.containsKey(temp)) {
-                            int oldValue = processed.get(temp);
-                            processed.replace(temp, ++oldValue);
-                        } else {
-                            processed.put(temp, 1);
-                        }
-                    }
+                    processed.put(temp, original);
                 }
             }
-            // if only unique needed:
-            // checkUnique();
-            // compress if needed:
-            // compress();
         }
     }
 
@@ -166,4 +111,6 @@ public class UniqProcessor {
         }
     }
 }
+
+
 
