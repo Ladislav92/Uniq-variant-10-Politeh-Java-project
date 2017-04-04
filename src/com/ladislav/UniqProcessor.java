@@ -12,7 +12,8 @@ public class UniqProcessor {
     private static UniqProcessor uniqProcessor = new UniqProcessor();
 
     private UniqParser up;
-    private List<String> lines = new ArrayList<>();
+    private Scanner input;
+    private PrintStream output;
     private Map<String, KVPair<String, Integer>> processed;
 
     private UniqProcessor() {
@@ -25,35 +26,35 @@ public class UniqProcessor {
     protected void process(String[] arguments) {
         up = new UniqParser();
         up.parseArgs(arguments);
-        read();
+        setupIO();
         processData();
         output();
     }
 
     // TODO test
 
-    public void read() {
+    public void setupIO() {
 
         if (up.isRiddenFromFile()) {
-            File inputFile = new File(up.getInputFileName());
+            try {
+                input = new Scanner(new BufferedReader(new FileReader(up.getInputFileName())));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
-            try (Scanner sc = new Scanner(new BufferedReader(new FileReader(inputFile)))) {
-                while (sc.hasNext()) {
-                    lines.add(sc.nextLine());
-                }
+        } else {
+            input = new Scanner(System.in);
+        }
+
+        if (up.isOutputedToFile()) {
+            File f = new File(up.getOutputFileName());
+            try {
+                output = new PrintStream(new FileOutputStream(f));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
-            Scanner sc = new Scanner(System.in);
-            String temp;
-
-            System.out.println("No file to read from provided in arguments.");
-            System.out.println("Enter lines you want to process from console! To quit, enter blank line.");
-
-            while (!(temp = sc.nextLine()).equals("")) {
-                lines.add(temp);
-            }
+            output = System.out;
         }
     }
 
@@ -71,9 +72,10 @@ public class UniqProcessor {
         }
         processed = new LinkedHashMap<>();
 
-        for (String line : lines) {
+        while (input.hasNextLine()){
 
-            KVPair<String, Integer> original = new KVPair<>(line, 1);
+            String line = input.nextLine();
+            
             String temp = line.substring(up.getIgnoredCharsNum());
 
             if (!up.isCaseSensitive()) {
@@ -84,7 +86,7 @@ public class UniqProcessor {
                 KVPair<String, Integer> kvp = processed.get(temp);
                 kvp.setValue(kvp.getValue() + 1);
             } else {
-                processed.put(temp, original);
+                processed.put(temp, new KVPair<>(line, 1));
             }
         }
     }
@@ -96,7 +98,9 @@ public class UniqProcessor {
     public void output() {
 
         if (processed == null) {
-            // output what is in to file or console
+            while (input.hasNextLine()) {
+                output.println(input.nextLine());
+            }
             return;
         }
 
@@ -112,7 +116,7 @@ public class UniqProcessor {
                 line = occurrence + " " + line;
             }
 
-            // output to file or console
+            output.println(line);
         }
     }
 }
