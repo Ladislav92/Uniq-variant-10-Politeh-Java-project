@@ -30,19 +30,18 @@ public class UniqProcessor {
         output();
     }
 
-    // TODO everything with scanner?
     // TODO test
 
     public void read() {
+
         if (up.isRiddenFromFile()) {
             File inputFile = new File(up.getInputFileName());
-            String temp;
 
-            try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
-                while ((temp = reader.readLine()) != null) {
-                    lines.add(temp);
+            try (Scanner sc = new Scanner(new BufferedReader(new FileReader(inputFile)))) {
+                while (sc.hasNext()) {
+                    lines.add(sc.nextLine());
                 }
-            } catch (IOException e) {
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
@@ -59,16 +58,19 @@ public class UniqProcessor {
     }
 
     // TODO test me !
+
     /**
      * Second idea (probably final)
      * Processes data only if unique or compressed flagged
      * Stores comparision string as map key and original
      * and number of occurrences in KVPair (key-value pair) object
-     *
      */
     public void processData() {
 
-        if (up.isUnique() || up.isCompressed()) {
+        boolean unique = up.isUnique();
+        boolean compressed = up.isCompressed();
+
+        if (unique || compressed) {
 
             processed = new LinkedHashMap<>();
             boolean caseInsensitive = !up.isCaseSensitive();
@@ -88,26 +90,69 @@ public class UniqProcessor {
                     processed.put(temp, original);
                 }
             }
+
+
         }
     }
 
-    //TODO implement me!
+        //TODO implement me!
+
+    /**
+     * First idea
+     */
     public void output() {
 
-        if (up.isOutputedToFile()) {
-            File outputFile = new File(up.getOutputFileName());
-//
-//            try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-//                for (String line : processed) {
-//                    writer.write(line);
-//                    writer.newLine();
-//                }
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+        File outputFile = up.isOutputedToFile() ? new File(up.getOutputFileName()) : null;
+
+        boolean unique = up.isUnique();
+        boolean compressed = up.isCompressed();
+        String temp = "";
+
+        if (processed != null) {
+
+            for (KVPair<String, Integer> original : processed.values()) {
+                String line = original.getKey();
+                int occurrence = original.getValue();
+
+                if (unique) {
+                    temp = occurrence == 1 ? line : "";
+                }
+
+                if (compressed) {
+                    if (temp.length() > 0) {
+                        temp = occurrence + " " + temp;
+                    } else {
+                        temp = "";
+                    }
+                }
+                if (temp.length() > 0) {
+                    if (outputFile != null) {
+                        outputToFile(temp, outputFile);
+                    } else {
+                        System.out.println(temp);
+                    }
+                }
+            }
         } else {
-//            processed.forEach(System.out::println);
+            for (String line : lines) {
+                if (outputFile != null) {
+                    outputToFile(line, outputFile);
+                } else {
+                    System.out.println(line);
+                }
+            }
+
+        }
+    }
+
+    
+
+    private void outputToFile(String s, File fileName) {
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            writer.write(s);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
