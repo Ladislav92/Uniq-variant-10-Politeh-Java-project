@@ -50,16 +50,5 @@ public class KVPair<K, V> {
     public String toString() {
         return key + ":" + value;
     }
-
-
-    public static void main(String[] args) {
-        StringBuilder s = new StringBuilder("Ladislav");
-        KVPair<StringBuilder, Integer> kvp = new KVPair<>(s, 1);
-
-        s.append(" Milunovic");
-
-        System.out.println(kvp.getKey());
-
-    }
 }
 
