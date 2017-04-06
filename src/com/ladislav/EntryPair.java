@@ -1,16 +1,18 @@
 package com.ladislav;
 
 /**
- *  Simple class that corresponds to class Entry<K, V>;
- *  User can set any data type, but it is recommended for key to be immutable.
+ *  Simple class that corresponds to standard Java class EntryPair<K, V>
+ *  User can set any data type as key and value, but it is recommended for key to be immutable.
+ *  Class has simple constructor, getters and setters.
+ *  Overridden methods: equals(), hashCode() and toString()
  */
 
 
-public class KVPair<K, V> {
+public class EntryPair<K, V> {
     private final K key;
     private V value;
 
-    public KVPair(K key, V value) {
+    public EntryPair(K key, V value) {
         this.key = key;
         this.value = value;
     }
@@ -39,8 +41,8 @@ public class KVPair<K, V> {
             return true;
         }
 
-        if (obj instanceof KVPair) {
-            KVPair other = (KVPair) obj;
+        if (obj instanceof EntryPair) {
+            EntryPair other = (EntryPair) obj;
             if (this.key.equals(other.key) && this.value.equals(other.value)) {
                 return true;
             }

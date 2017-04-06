@@ -1,7 +1,9 @@
 package com.ladislav;
 
 /**
- * Created by Ladislav on 3/22/2017.
+ *  UniqParser is helper class to parse arguments given for UniqProcessor
+ *  It has parsArgs(String[] args) method provided and getters and setters for fields that contain information given in arguments.
+ *  Shouldn't be used without UniqProcessor
  */
 
 class UniqParser {
@@ -9,14 +11,18 @@ class UniqParser {
     private String inputFileName = "";
     private String outputFileName = "";
 
-    private int ignoreCharsTo = 0;         // -s
+    private int ignoreCharsTo = 0;
 
-    private boolean outputedToFile = false;   // -o
+    private boolean outputedToFile = false;
     private boolean riddenFromFile = false;
-    private boolean caseSensitive = true;   // -i
-    private boolean unique = false;         // -u
-    private boolean compressed = false;     // -c
+    private boolean caseSensitive = true;
+    private boolean unique = false;
+    private boolean counted = false;
 
+    /**
+     * Parses arguments for UniqProcessor
+     * @param args arguments provided for input processing in class UniqProcessor
+     */
     void parseArgs(String[] args) {
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
@@ -27,7 +33,7 @@ class UniqParser {
                     unique = true;
                     break;
                 case "-c":
-                    compressed = true;
+                    counted = true;
                     break;
                 case "-s":
                     ignoreCharsTo = Integer.parseInt(args[++i]);
@@ -73,6 +79,6 @@ class UniqParser {
     }
 
     public boolean isCounted() {
-        return compressed;
+        return counted;
     }
 }

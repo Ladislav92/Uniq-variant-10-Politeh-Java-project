@@ -3,7 +3,7 @@ package com.ladislav;
 import junit.framework.TestCase;
 
 /**
- * Created by Ladislav on 3/22/2017.
+ *  Unit test for UniqParser
  */
 public class UniqParserTest extends TestCase {
 
