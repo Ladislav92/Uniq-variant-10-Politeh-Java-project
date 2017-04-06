@@ -72,7 +72,7 @@ class UniqParser {
         return unique;
     }
 
-    public boolean isCompressed() {
+    public boolean isCounted() {
         return compressed;
     }
 }

@@ -16,7 +16,7 @@ public class UniqParserTest extends TestCase {
 
         assertFalse(up.isCaseSensitive());
         assertTrue(up.isUnique());
-        assertTrue(up.isCompressed());
+        assertTrue(up.isCounted());
         assertEquals(up.getIgnoredCharsNum(), 5);
         assertEquals(up.getOutputFileName(), "output_file.txt");
         assertEquals(up.getInputFileName(), "input_file.txt");
@@ -28,7 +28,7 @@ public class UniqParserTest extends TestCase {
 
         assertFalse(up.isCaseSensitive());
         assertTrue(up.isUnique());
-        assertTrue(up.isCompressed());
+        assertTrue(up.isCounted());
         assertEquals(up.getIgnoredCharsNum(), 5);
         assertEquals(up.getOutputFileName(), "");
         assertEquals(up.getInputFileName(), "");
@@ -40,7 +40,7 @@ public class UniqParserTest extends TestCase {
 
         assertFalse(up.isCaseSensitive());
         assertTrue(up.isUnique());
-        assertTrue(up.isCompressed());
+        assertTrue(up.isCounted());
         assertEquals(up.getIgnoredCharsNum(), -1);
         assertEquals(up.getOutputFileName(), "output.txt");
         assertEquals(up.getInputFileName(), "");
@@ -52,7 +52,7 @@ public class UniqParserTest extends TestCase {
 
         assertTrue(up.isCaseSensitive());
         assertTrue(up.isUnique());
-        assertTrue(up.isCompressed());
+        assertTrue(up.isCounted());
         assertEquals(up.getIgnoredCharsNum(), -1);
         assertEquals(up.getOutputFileName(), "output.txt");
         assertEquals(up.getInputFileName(), "input.txt");

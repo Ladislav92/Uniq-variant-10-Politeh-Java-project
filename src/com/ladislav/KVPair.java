@@ -4,6 +4,8 @@ package com.ladislav;
  *  Simple class that corresponds to class Entry<K, V>;
  *  User can set any data type, but it is recommended for key to be immutable.
  */
+
+
 public class KVPair<K, V> {
     private final K key;
     private V value;
