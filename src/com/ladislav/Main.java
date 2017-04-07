@@ -8,7 +8,6 @@ public class Main {
         processor.init(args);
         processor.process();
         processor.output();
+
     }
 }
-
-

@@ -153,11 +153,12 @@ public class UniqProcessor implements IProcessor {
 
             String line = input.nextLine();
             String temp = line;
+            String tempPrevious = previous;
 
-            if (up.getIgnoredCharsNum() > previous.length()) {
-                previous = "";
+            if (up.getIgnoredCharsNum() > tempPrevious.length()) {
+                tempPrevious = "";
             } else {
-                previous = previous.substring(up.getIgnoredCharsNum());
+                tempPrevious = tempPrevious.substring(up.getIgnoredCharsNum());
             }
 
             if (up.getIgnoredCharsNum() > temp.length()) {
@@ -168,10 +169,10 @@ public class UniqProcessor implements IProcessor {
 
             if (!up.isCaseSensitive()) {
                 temp = temp.toLowerCase();
-                previous = previous.toLowerCase();
+                tempPrevious = tempPrevious.toLowerCase();
             }
 
-            if (temp.equals(previous)) {
+            if (temp.equals(tempPrevious)) {
                 counter++;
             } else {
                 output(previous, counter);
