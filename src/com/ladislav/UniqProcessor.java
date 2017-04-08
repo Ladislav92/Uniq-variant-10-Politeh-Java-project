@@ -43,9 +43,9 @@ public class UniqProcessor implements IProcessor {
      * @param arguments with directives for data processing, taken from command line.
      */
     public void init(String[] arguments) {
-        up = new UniqParser();
-        up.parseArgs(arguments);
-        setupIO();
+            up = new UniqParser();
+            up.parseArgs(arguments);
+            setupIO();
     }
 
     /**
@@ -174,10 +174,14 @@ public class UniqProcessor implements IProcessor {
 
             if (temp.equals(tempPrevious)) {
                 counter++;
+
             } else {
                 output(previous, counter);
                 previous = line;
                 counter = 1;
+            }
+            if (!input.hasNextLine()) {
+                output(previous, counter);
             }
         }
     }
@@ -195,7 +199,7 @@ public class UniqProcessor implements IProcessor {
         if (up.isCounted()) {
             output.println(occurrence + " : " + line);
         } else {
-            output.println(line);
+            output.print(line+"\n");
         }
     }
 
