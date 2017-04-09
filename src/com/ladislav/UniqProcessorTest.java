@@ -3,6 +3,7 @@ package com.ladislav;
 import junit.framework.TestCase;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class UniqProcessorTest extends TestCase {
 
         processor.init(arguments);
         processor.processAndOutput();
-
+        processor.destroy();
 
         Path p = Paths.get("output_file.txt");
         File testFile = p.toFile();
@@ -67,6 +68,8 @@ public class UniqProcessorTest extends TestCase {
             for (String anExpectedResult : expectedResults) {
                 assertEquals(anExpectedResult, br.readLine().trim());
             }
+        } finally {
+            Files.delete(p);
         }
 
         /*
@@ -241,6 +244,7 @@ public class UniqProcessorTest extends TestCase {
         processor.init(arguments);
         processor.process();
         processor.output();
+        processor.destroy();
 
         Path p = Paths.get("output_file.txt");
         File testFile = p.toFile();
@@ -250,6 +254,8 @@ public class UniqProcessorTest extends TestCase {
             for (String anExpectedResult : expectedResults) {
                 assertEquals(anExpectedResult, br.readLine().trim());
             }
+        } finally {
+            Files.delete(p);
         }
 
         /*
@@ -427,7 +433,7 @@ public class UniqProcessorTest extends TestCase {
 
     }
 
-    public void testCloseIOIllegalStateException(){
+    public void testCloseIOIllegalStateException() {
         String input = "Hey Joe Where You Goin' With That Gun Of Yours";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
         String[] args = {};
@@ -443,6 +449,17 @@ public class UniqProcessorTest extends TestCase {
         } catch (Exception e) {
             assertTrue(e instanceof IllegalStateException);
         }
+        try {
+            processor.output();
+            fail("Should throw IllegalStateException if I/O is closed");
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+        try {
+            processor.processAndOutput();
+            fail("Should throw IllegalStateException if I/O is closed");
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
     }
-
 }

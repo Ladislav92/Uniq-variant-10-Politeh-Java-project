@@ -80,8 +80,6 @@ public class UniqProcessor implements IProcessor {
         }
     }
 
-    // TODO Unit test me !
-
     /**
      * Processes data and stores its result in a list of key-value pairs.
      * EntryPair(String, Integer) holds original input and number of its sequential occurrences
@@ -138,8 +136,6 @@ public class UniqProcessor implements IProcessor {
         return processed;
     }
 
-    //TODO Unit test me !
-
     /**
      * Processes and immediately outputs the given data by calling helper method output(String line, int occurrences)
      * It is preferable to use this method over methods process() and output() (if not needed access between those processes)
@@ -148,6 +144,10 @@ public class UniqProcessor implements IProcessor {
      * @throws IllegalStateException if Scanner or PrintStream are closed
      */
     public void processAndOutput() {
+
+        if (input == null || output == null) {
+            throw new IllegalStateException();
+        }
 
         String previous = input.hasNextLine() ? input.nextLine() : "";
         int counter = 1;
@@ -212,8 +212,6 @@ public class UniqProcessor implements IProcessor {
         }
     }
 
-    //TODO unit test me!
-
     /**
      * Outputs the processed data stored inside UniqProcessor in the List of key-value pairs.
      * This is preferred method to use if no changes are made to processed data.
@@ -221,6 +219,10 @@ public class UniqProcessor implements IProcessor {
      * @throws NullPointerException if data isn't processed.
      */
     public void output() {
+
+        if (output == null) {
+            throw new IllegalStateException();
+        }
         if (processed == null) {
             throw new NullPointerException("Data has to be processed first.");
         }
@@ -228,8 +230,6 @@ public class UniqProcessor implements IProcessor {
             output(original.getKey(), original.getValue());
         }
     }
-
-    //TODO Unit test me !
 
     /**
      * Gives possibility to output data that user processed and changed afterwards.
@@ -255,7 +255,7 @@ public class UniqProcessor implements IProcessor {
      * @throws NullPointerException if any of streams is set to null.
      */
     public void destroy() {
-        if (input == null || output == null) {
+        if (input == null || output == null || up == null) {
             throw new NullPointerException();
         }
         input.close();

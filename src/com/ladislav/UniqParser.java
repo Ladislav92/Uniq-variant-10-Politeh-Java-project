@@ -1,12 +1,12 @@
 package com.ladislav;
 
 /**
- *  UniqParser is helper class to parse arguments given for UniqProcessor
- *  It has parsArgs(String[] args) method provided and getters and setters for fields that contain information given in arguments.
- *  Shouldn't be used without UniqProcessor
+ * UniqParser is helper class to parse arguments given for UniqProcessor
+ * It has parsArgs(String[] args) method provided and getters and setters for fields that contain information given in arguments.
+ * Shouldn't be used without UniqProcessor
  */
 
-class UniqParser {
+class UniqParser implements IParser {
 
     private String inputFileName = "";
     private String outputFileName = "";
@@ -21,9 +21,10 @@ class UniqParser {
 
     /**
      * Parses arguments for UniqProcessor
+     *
      * @param args arguments provided for input processing in class UniqProcessor
      */
-    void parseArgs(String[] args) {
+    public void parseArgs(String[] args) {
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-i":
