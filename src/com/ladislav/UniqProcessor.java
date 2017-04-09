@@ -43,9 +43,9 @@ public class UniqProcessor implements IProcessor {
      * @param arguments with directives for data processing, taken from command line.
      */
     public void init(String[] arguments) {
-            up = new UniqParser();
-            up.parseArgs(arguments);
-            setupIO();
+        up = new UniqParser();
+        up.parseArgs(arguments);
+        setupIO();
     }
 
     /**
@@ -89,8 +89,13 @@ public class UniqProcessor implements IProcessor {
      * since it stores results of processing in the memory.
      *
      * @return ArrayList of processed data
+     * @throws IllegalStateException if Scanner is closed
      */
     public List<EntryPair<String, Integer>> process() {
+
+        if (input == null || output == null) {
+            throw new IllegalStateException();
+        }
 
         processed = new ArrayList<>();
 
@@ -130,7 +135,6 @@ public class UniqProcessor implements IProcessor {
                 }
             }
         }
-        input.close();
         return processed;
     }
 
@@ -140,6 +144,8 @@ public class UniqProcessor implements IProcessor {
      * Processes and immediately outputs the given data by calling helper method output(String line, int occurrences)
      * It is preferable to use this method over methods process() and output() (if not needed access between those processes)
      * It is faster and takes less memory,  since it doesn't store processed data in a List, like method process() does.
+     *
+     * @throws IllegalStateException if Scanner or PrintStream are closed
      */
     public void processAndOutput() {
 
@@ -185,8 +191,6 @@ public class UniqProcessor implements IProcessor {
                 output(previous, counter);
             }
         }
-        input.close();
-        output.close();
     }
 
     /**
@@ -194,15 +198,17 @@ public class UniqProcessor implements IProcessor {
      *
      * @param line       of processed input.
      * @param occurrence of processed line.
+     * @throws IllegalStateException when PrintStream is closed
      */
     private void output(String line, int occurrence) {
+
         if (up.isUnique() && occurrence != 1 || line.length() == 0) {
             return;
         }
         if (up.isCounted()) {
             output.println(occurrence + " : " + line);
         } else {
-            output.print(line+"\n");
+            output.print(line + "\n");
         }
     }
 
@@ -221,7 +227,6 @@ public class UniqProcessor implements IProcessor {
         for (EntryPair<String, Integer> original : processed) {
             output(original.getKey(), original.getValue());
         }
-        output.close();
     }
 
     //TODO Unit test me !
@@ -240,6 +245,23 @@ public class UniqProcessor implements IProcessor {
         for (EntryPair<String, Integer> pair : list) {
             output(pair.getKey(), pair.getValue());
         }
+    }
+
+    /**
+     * Closes input and output streams.
+     * Calling this method is mandatory after finishing processing and output,
+     * since file may stay locked down if they stay open.
+     *
+     * @throws NullPointerException if any of streams is set to null.
+     */
+    public void destroy() {
+        if (input == null || output == null) {
+            throw new NullPointerException();
+        }
+        input.close();
         output.close();
+        input = null;
+        output = null;
+        up = null;
     }
 }

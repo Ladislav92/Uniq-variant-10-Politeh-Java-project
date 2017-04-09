@@ -3,7 +3,6 @@ package com.ladislav;
 import junit.framework.TestCase;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class UniqProcessorTest extends TestCase {
         UniqProcessor processorClient = UniqProcessor.getInstance();
 
         try {
-            processorClient.closeIO();
+            processorClient.destroy();
             fail("Should throw NullPointerException if processor isn't initialized");
         } catch (Exception e) {
             assertTrue(e instanceof NullPointerException);
@@ -46,6 +45,7 @@ public class UniqProcessorTest extends TestCase {
         for (int i = 0; i < expectedResults.length; i++) {
             assertEquals(expectedResults[i], realOut[i].trim());
         }
+
         outputStream.reset();
 
         /*
@@ -57,7 +57,7 @@ public class UniqProcessorTest extends TestCase {
 
         processor.init(arguments);
         processor.processAndOutput();
-        processor.closeIO();
+
 
         Path p = Paths.get("output_file.txt");
         File testFile = p.toFile();
@@ -67,8 +67,6 @@ public class UniqProcessorTest extends TestCase {
             for (String anExpectedResult : expectedResults) {
                 assertEquals(anExpectedResult, br.readLine().trim());
             }
-        } finally {
-            Files.delete(p);
         }
 
         /*
@@ -87,14 +85,12 @@ public class UniqProcessorTest extends TestCase {
 
         processor.init(arguments);
         processor.processAndOutput();
-        processor.closeIO();
 
         realOut = outputStream.toString().split("\n");
 
         for (int i = 0; i < expectedResults.length; i++) {
             assertEquals(expectedResults[i], realOut[i].trim());
         }
-
         inputStream.reset();
         outputStream.reset();
         /*
@@ -117,7 +113,6 @@ public class UniqProcessorTest extends TestCase {
 
         processor.init(arguments);
         processor.processAndOutput();
-        processor.closeIO();
 
         realOut = outputStream.toString().split("\n");
 
@@ -145,7 +140,6 @@ public class UniqProcessorTest extends TestCase {
 
         processor.init(arguments);
         processor.processAndOutput();
-        processor.closeIO();
 
         realOut = outputStream.toString().split("\n");
 
@@ -174,7 +168,6 @@ public class UniqProcessorTest extends TestCase {
 
         processor.init(arguments);
         processor.processAndOutput();
-        processor.closeIO();
 
         realOut = outputStream.toString().split("\n");
 
@@ -202,7 +195,6 @@ public class UniqProcessorTest extends TestCase {
 
         processor.init(arguments);
         processor.processAndOutput();
-        processor.closeIO();
 
         realOut = outputStream.toString().split("\n");
 
@@ -216,7 +208,6 @@ public class UniqProcessorTest extends TestCase {
     }
 
     public void testProcessAndTestOutput() throws Exception {
-
 
         /*
          * FIRST test case: from file to console
@@ -250,7 +241,6 @@ public class UniqProcessorTest extends TestCase {
         processor.init(arguments);
         processor.process();
         processor.output();
-        processor.closeIO();
 
         Path p = Paths.get("output_file.txt");
         File testFile = p.toFile();
@@ -260,8 +250,6 @@ public class UniqProcessorTest extends TestCase {
             for (String anExpectedResult : expectedResults) {
                 assertEquals(anExpectedResult, br.readLine().trim());
             }
-        } finally {
-            Files.delete(p);
         }
 
         /*
@@ -281,7 +269,6 @@ public class UniqProcessorTest extends TestCase {
         processor.init(arguments);
         processor.process();
         processor.output();
-        processor.closeIO();
 
         realOut = outputStream.toString().split("\n");
 
@@ -312,7 +299,6 @@ public class UniqProcessorTest extends TestCase {
         processor.init(arguments);
         processor.process();
         processor.output();
-        processor.closeIO();
 
         realOut = outputStream.toString().split("\n");
 
@@ -337,11 +323,9 @@ public class UniqProcessorTest extends TestCase {
         arguments = new String[]{"-c", "-s", "7"};
         expectedResults = new String[]{"16 : Quick"};
 
-
         processor.init(arguments);
         processor.process();
         processor.output();
-        processor.closeIO();
 
         realOut = outputStream.toString().split("\n");
 
@@ -371,7 +355,6 @@ public class UniqProcessorTest extends TestCase {
         processor.init(arguments);
         processor.process();
         processor.output();
-        processor.closeIO();
 
         realOut = outputStream.toString().split("\n");
 
@@ -399,7 +382,6 @@ public class UniqProcessorTest extends TestCase {
         processor.init(arguments);
         processor.process();
         processor.output();
-        processor.closeIO();
 
         realOut = outputStream.toString().split("\n");
 
@@ -407,9 +389,9 @@ public class UniqProcessorTest extends TestCase {
             assertEquals(expectedResults[i], realOut[i].trim());
         }
 
+        processor.destroy();
         inputStream.reset();
         outputStream.reset();
-
     }
 
     public void testOutputWithParams() throws Exception {
@@ -435,13 +417,13 @@ public class UniqProcessorTest extends TestCase {
 
         processor.init(args);
         processor.output(testList);
-        processor.closeIO();
 
         String[] realOut = outputStream.toString().split("\n");
 
         for (int i = 0; i < testInput.length; i++) {
             assertEquals(testInput[i], realOut[i]);
         }
+        processor.destroy();
 
     }
 
@@ -453,7 +435,7 @@ public class UniqProcessorTest extends TestCase {
         UniqProcessor processor = UniqProcessor.getInstance();
 
         processor.init(args);
-        processor.closeIO();
+        processor.destroy();
 
         try {
             processor.process();
