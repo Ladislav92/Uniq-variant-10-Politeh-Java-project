@@ -130,6 +130,7 @@ public class UniqProcessor implements IProcessor {
                 }
             }
         }
+        input.close();
         return processed;
     }
 
@@ -184,6 +185,8 @@ public class UniqProcessor implements IProcessor {
                 output(previous, counter);
             }
         }
+        input.close();
+        output.close();
     }
 
     /**
@@ -218,6 +221,7 @@ public class UniqProcessor implements IProcessor {
         for (EntryPair<String, Integer> original : processed) {
             output(original.getKey(), original.getValue());
         }
+        output.close();
     }
 
     //TODO Unit test me !
@@ -236,5 +240,6 @@ public class UniqProcessor implements IProcessor {
         for (EntryPair<String, Integer> pair : list) {
             output(pair.getKey(), pair.getValue());
         }
+        output.close();
     }
 }
